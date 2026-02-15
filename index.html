@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Catch My Falling Heart Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Birthstone+Bounce:wght@500&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            margin: 0; 
+            background-color: #fcf1f4; 
+            background-image: radial-gradient(#f7d7e3 1px, transparent 1px); 
+            background-size: 20px 20px; display: flex; justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            overflow: hidden; 
+            font-family: 'Playfair Display', serif; 
+        }
+        #container { 
+            position: relative; 
+            width: 450px; 
+            height: 650px; 
+            background: #ffffff; 
+            border: 15px solid #f2cbd9; 
+            outline: 2px solid #b37d6d; 
+            border-radius: 10px; box-shadow: 0 20px 50px rgba(179, 125, 109, 0.2); 
+        }
+        #container::before { 
+            content: ""; 
+            position: absolute; 
+            top: -10px; 
+            left: -10px; 
+            right: -10px; 
+            bottom: -10px; 
+            border: 2px dashed #b37d6d; 
+            pointer-events: none; 
+            border-radius: 12px; 
+        }
+        canvas { 
+            display: block; 
+            cursor: none; 
+        }
+        #ui { 
+            position: absolute; 
+            top: 20px; 
+            width: 100%; 
+            text-align: center; 
+            color: #b37d6d; pointer-events: none; z-index: 5; 
+        }
+        .score-box { 
+            display: inline-block; 
+            padding: 5px 15px; 
+            background: rgba(255, 255, 255, 0.9); 
+            border: 1px solid #f2cbd9; 
+            border-radius: 20px; 
+            font-size: 18px; 
+            margin: 0 10px; 
+        }
+        .overlay { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(255, 245, 247, 0.98); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 10; 
+            text-align: center; 
+        }
+        h1 { 
+            font-family: "Birthstone Bounce", cursive; 
+            font-size: 55px; 
+            color: #b37d6d; 
+            margin: 0;
+        }
+        button { 
+            font-family: 'Playfair Display', serif; 
+            background: #f2cbd9; 
+            border: 1px solid #b37d6d; 
+            color: #b37d6d; 
+            padding: 10px 30px; 
+            font-size: 18px; 
+            border-radius: 25px; 
+            cursor: pointer; 
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="ui">
+            <div class="score-box">Score: <span id="score">0</span></div>
+            <div class="score-box">Life: <span id="lives">3</span></div>
+        </div>
+        <canvas id="canvas" width="450" height="650"></canvas>
+        <div id="menu" class="overlay">
+            <h1>Catch My Falling Heart</h1>
+            <small style="color: #b37d6d; font-style: italic; padding: 0 20px;">
+                How to play? Just catch the falling hearts and flowers until you got no more lives left. Basically, catch them until the end!<br>
+                So... Take the risk or lose the 3 chances?
+            </small><br>
+            <button onclick="startGame()">Begin</button>
+            <button onclick="location.href='authors.html'" style="background:none; border:none; text-decoration:underline; font-size:14px;">About Developers</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const menu = document.getElementById('menu');
+        const scoreSpan = document.getElementById('score');
+        const livesSpan = document.getElementById('lives');
+
+        let score = 0, lives = 3, gameActive = false, hearts = [], animationId;
+
+        const catcher = {
+            x: 185, y: 580, w: 80, h: 12,
+            draw() {
+                ctx.fillStyle = '#f2cbd9';
+                ctx.strokeStyle = '#b37d6d';
+                ctx.beginPath(); 
+                ctx.roundRect(this.x, this.y, this.w, this.h, 10);
+                ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#b37d6d'; ctx.font = '20px serif';
+                ctx.fillText('🎀', this.x + 30, this.y + 10);
+            }
+        };
+
+        class Heart {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * 400 + 25;
+                this.y = -30;
+                this.speed = 2 + (score / 12);
+                this.emoji = Math.random() > 0.5 ? '🌸' : '❤️';
+            }
+            update() {
+                this.y += this.speed;
+                if (this.y > catcher.y && this.x > catcher.x && this.x < catcher.x + catcher.w) {
+                    score++; 
+                    scoreSpan.innerText = score; 
+                    this.reset();
+                }
+                if (this.y > 650) {
+                    lives--; 
+                    livesSpan.innerText = lives;
+                    if (lives <= 0) endGame(); else this.reset();
+                }
+            }
+            draw() { 
+                ctx.font = '25px serif'; 
+                ctx.fillText(this.emoji, this.x, this.y); 
+            }
+        }
+
+        function startGame() {
+            score = 0; lives = 3; gameActive = true;
+            scoreSpan.innerText = score; livesSpan.innerText = lives;
+            hearts = [new Heart(), new Heart()];
+            menu.style.display = 'none';
+            gameLoop();
+        }
+
+        function endGame() {
+            gameActive = false;
+            cancelAnimationFrame(animationId);
+            // In-update rin ang game over menu para mag-link sa authors.html
+            menu.innerHTML = `
+                <h1>Aww!</h1>
+                <p>Final Score: ${score}</p>
+                <button onclick="startGame()">Try Again</button><br>
+                <button onclick="location.href='authors.html'" style="background:none; border:none; text-decoration:underline; font-size:14px;">About Developers</button>
+            `;
+            menu.style.display = 'flex';
+        }
+
+        canvas.addEventListener('mousemove', (e) => {
+            const r = canvas.getBoundingClientRect();
+            catcher.x = e.clientX - r.left - catcher.w / 2;
+        });
+
+        // Touch support para sa phone testing niyo
+        canvas.addEventListener('touchmove', (e) => {
+            if (!gameActive) return;
+            e.preventDefault();
+            const r = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            catcher.x = touch.clientX - r.left - catcher.w / 2;
+        }, { passive: false });
+
+        function gameLoop() {
+            if (!gameActive) return;
+            ctx.clearRect(0, 0, 450, 650);
+            catcher.draw();
+            hearts.forEach(h => { h.update(); h.draw(); });
+            animationId = requestAnimationFrame(gameLoop);
+        }
+    </script>
+</body>
+</html>

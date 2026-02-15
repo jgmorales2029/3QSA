@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>The Developers - Catch My Falling Heart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Birthstone+Bounce:wght@500&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            margin: 0; 
+            background-color: #fcf1f4; 
+            background-image: radial-gradient(#f7d7e3 1px, transparent 1px); 
+            background-size: 20px 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            font-family: 'Playfair Display', serif; 
+        }
+        #container { 
+            position: relative; 
+            width: 450px; 
+            padding: 40px 20px;
+            background: #ffffff; 
+            border: 15px solid #f2cbd9; 
+            outline: 2px solid #b37d6d; 
+            border-radius: 10px; 
+            box-shadow: 0 20px 50px rgba(179, 125, 109, 0.2); 
+            text-align: center;
+        }
+        #container::before { 
+            content: ""; 
+            position: absolute; 
+            top: -10px; left: -10px; right: -10px; bottom: -10px; 
+            border: 2px dashed #b37d6d; 
+            pointer-events: none; 
+            border-radius: 12px; 
+        }
+        h1 { 
+            font-family: "Birthstone Bounce", cursive; 
+            font-size: 65px; 
+            color: #b37d6d; 
+            margin: 0 0 30px 0;
+        }
+        .dev-row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 40px;
+        }
+        .dev-profile img { 
+            width: 90px; 
+            height: 90px; 
+            border-radius: 50%; 
+            border: 2px solid #f2cbd9; 
+            outline: 1px solid #b37d6d; 
+            object-fit: cover; 
+            margin-bottom: 15px;
+        }
+        .dev-profile p {
+            margin: 5px 0;
+            color: #444;
+            font-size: 14px;
+        }
+        .dev-profile strong {
+            display: block;
+            font-size: 16px;
+            color: #b37d6d;
+            margin-bottom: 8px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+            margin-top: 30px;
+            padding: 0 10px;
+        }
+        .info-header {
+            color: #b37d6d;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #f2cbd9;
+            padding-bottom: 5px;
+        }
+        .info-content {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+        .hugot {
+            color: #b37d6d;
+            font-style: italic;
+            display: block;
+            margin-bottom: 10px;
+        }
+        button { 
+            font-family: 'Playfair Display', serif; 
+            background: #f2cbd9; 
+            border: 1px solid #b37d6d; 
+            color: #b37d6d; 
+            padding: 10px 40px; 
+            font-size: 18px; 
+            border-radius: 25px; 
+            cursor: pointer; 
+            margin-top: 40px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #eab8c9;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>The Developers</h1>
+
+        <div class="dev-row">
+            <div class="dev-profile">
+                <img src="https://raw.githubusercontent.com/jgmorales2029/3QSA/main/2e3aac1a-984f-4014-b108-481cd0fa277e.jpg" alt="Mia">
+                <strong>Mia Ysabel M. Cu</strong>
+                <p>Game Designer & Creative Director</p>
+                <p>9-Samat</p>
+            </div>
+            <div class="dev-profile">
+                <img src="https://raw.githubusercontent.com/jgmorales2029/3QSA/main/a9430515-b61c-447c-a752-30fb58cc6780.jpg" alt="Jewel">
+                <strong>Jewel Erica G. Morales</strong>
+                <p>Lead Technical Developer & Creative Director</p>
+                <p>9-Samat</p>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div>
+                <div class="info-header">Cheat Sheet</div>
+                <div class="info-content">
+                    <span class="hugot">...basta 'wag mag-cheat in real life! 😉</span>
+                    • Goal: Don't lose the 3 chances!<br>
+                    • Tip: Just catch it when it falls!
+                </div>
+            </div>
+            <div>
+                <div class="info-header">References</div>
+                <div class="info-content">
+                    • Bootstrap 5.3 & MDN Canvas API<br>
+                    • PSHS-CLC CS3 Summative Assessment<br>
+                    • S.Y. 2025-2026
+                </div>
+            </div>
+        </div>
+
+        <button onclick="location.href='index.html'">Back</button>
+    </div>
+</body>
+</html>
